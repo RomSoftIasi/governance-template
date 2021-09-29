@@ -36,8 +36,8 @@ then
   echo 'DEFAULT_REGION : Default region to be used by the AWS login process'
   echo 'POD_DOCKER_REPOSITORY : The docker repository where all the docker images will be uploaded and from where will be used'
   echo ''
-  echo 'GOVCONTAINERNAME : Governance deployment name'
-  echo 'GOVAPPNAME : Governance container label name'
+  echo 'GOV_CONTAINER_NAME : Governance deployment name'
+  echo 'GOV_APP_NAME : Governance container label name'
   echo 'GOV_DOCKER_IMAGE : Governance docker image name'
   echo 'GOV_DOCKER_IMAGE_VERSION : Governance docker image version. Currently is coded to gather the latest commit number and use it as a version'
   echo ''
@@ -65,22 +65,30 @@ for i in "$@"
 do
   case $i in
     --build-all)
-      ./governance-workspace/scripts/gov/build-gov.sh
-      ./governance-workspace/scripts/jenkins/build-jenkins-agents.sh
+      cd governance-workspace || return
+      ./scripts/gov/build-gov.sh
+      ./scripts/jenkins/build-jenkins-agents.sh
+      cd ..
       ;;
     --deploy-all)
-      ./governance-workspace/scripts/gov/deploy-gov.sh
-      ./governance-workspace/scripts/jenkins/deploy-jenkins.sh
+      cd governance-workspace || return
+      ./scripts/gov/deploy-gov.sh
+      ./scripts/jenkins/deploy-jenkins.sh
+      cd ..
       ;;
     --clean-all)
-      ./governance-workspace/scripts/gov/clean-gov.sh
-      ./governance-workspace/scripts/jenkins/clean-jenkins.sh
+      cd governance-workspace || return
+      ./scripts/gov/clean-gov.sh
+      ./scripts/jenkins/clean-jenkins.sh
+      cd ..
       ;;
     --cbd-gov)
-      ./governance-workspace/scripts/gov/clean-gov.sh
-      ./governance-workspace/scripts/gov/build-gov.sh
+      cd governance-workspace || return
+      ./scripts/gov/clean-gov.sh
+      ./scripts/gov/build-gov.sh
       sleep 1m
-      ./governance-workspace/scripts/gov/deploy-gov.sh
+      ./scripts/gov/deploy-gov.sh
+      cd ..
       ;;
   esac
 done
