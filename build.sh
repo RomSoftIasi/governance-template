@@ -55,7 +55,7 @@ fi
 
 if [ "$1" = 'aws' ]
 then
-  ./eGovernance-modules/scripts/configure_aws.sh --docker --jenkins-secret
+  ./eGovernance-modules/scripts/configure_docker.sh --docker --jenkins-secret
 else
   echo 'WARNING: aws command was not used. The rest of the operations will be done assuming the docker login was executed and the jenkins secret will be created after the Jenkins is deployed and before using any pipelines '
   echo ''
