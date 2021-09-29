@@ -1,2 +1,3 @@
 # Created by .ignore support plugin (hsz.mobi)
 **/governance-workspace/*
+/scripts/.env
