@@ -18,14 +18,10 @@ podTemplate(
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
     envVars: [secretEnvVar(key: 'DOCKER_USERNAME', secretName: 'docker-config', secretKey: 'docker_username'),
               secretEnvVar(key: 'DOCKER_PASSWORD', secretName: 'docker-config', secretKey: 'docker_password'),
-              secretEnvVar(key: 'GITHUB_REPO_TOKEN', secretName: 'docker-config', secretKey: 'GITHUB_REPO_TOKEN'),
+              secretEnvVar(key: 'GITHUB_REPO_TOKEN', secretName: 'docker-config', secretKey: 'GITHUB_REPO_TOKEN')
              ]
   ){
-            podTemplate(
-          containers: [
-              containerTemplate(name: 'node', image: 'node:latest', ttyEnabled: true, command: 'cat')
-              ]
-          ){
+
               node(POD_LABEL){
 
                   stage ('Build and publish docker Image'){
@@ -45,7 +41,7 @@ podTemplate(
 
               }
 
-          }
+
 
 
 
