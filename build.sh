@@ -17,7 +17,7 @@ then
   echo 'Help for build.sh'
   echo ''
   echo '--env-legend            Show greater descriptions for the defined environment variables '
-  echo 'aws                     Creates the aws-config secret in order to be used by Jenkins docker pipelines and executes the docker login in order to push docker images'
+  echo 'docker                  Creates the docker-config secret in order to be used by Jenkins docker pipelines and executes the docker login in order to push docker images'
   echo '--build-all             Build and push docker images for Governance and Jenkins agents '
   echo '--deploy-all            Deploy Jenkins and Governance '
   echo '--clean-all             Remove Jenkins and Governance installations'
@@ -31,9 +31,8 @@ then
   echo ''
   echo 'ENVIRONMENT VARIABLES - LEGEND'
   echo ''
-  echo 'AWS_ACCESS_KEY_ID : AWS ACCESS KEY ID'
-  echo 'AWS_SECRET_ACCESS_KEY : AWS SECRET ACCESS KEY'
-  echo 'DEFAULT_REGION : Default region to be used by the AWS login process'
+  echo 'DOCKER_USERNAME : docker username'
+  echo 'DOCKER_PASSWORD : docker password'
   echo 'POD_DOCKER_REPOSITORY : The docker repository where all the docker images will be uploaded and from where will be used'
   echo ''
   echo 'GOV_CONTAINER_NAME : Governance deployment name'
@@ -53,11 +52,11 @@ fi
 
 ./scripts/clone-gov.sh
 
-if [ "$1" = 'aws' ]
+if [ "$1" = 'docker' ]
 then
   ./scripts/configure_docker.sh --docker --jenkins-secret
 else
-  echo 'WARNING: aws command was not used. The rest of the operations will be done assuming the docker login was executed and the jenkins secret will be created after the Jenkins is deployed and before using any pipelines '
+  echo 'WARNING: docker command was not used. The rest of the operations will be done assuming the docker login was executed and the jenkins secret will be created after the Jenkins is deployed and before using any pipelines '
   echo ''
 fi
 

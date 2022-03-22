@@ -1,4 +1,4 @@
-#rm -rf governance-workspace
-git clone https://github.com/PharmaLedger-IMI/governance-workspace.git
-#cp  -rf ./jenkins ./governance-workspace
+. ./scripts/.env
+
+git clone https://"$GITHUB_REPO_TOKEN":x-oauth-basic@github.com/RomSoftIasi/governance-workspace.git
 cp -f ./scripts/.env ./governance-workspace/scripts/

@@ -3,34 +3,30 @@
 
 
 
-function configure_aws(){
-echo "Configure AWS"
+function configure_docker(){
 
-aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
-aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
-aws configure set default.region "$DEFAULT_REGION"
-aws configure set default.output 'text'
+echo "Authenticate on DOCKER-HUB repository"
+docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
 
-echo "Authenticate on AWS repository"
-aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$POD_DOCKER_REPOSITORY"
 }
 
 function create_jenkins_secret(){
-echo 'Creating kubernetes secrets aws-config ...'
+echo 'Creating kubernetes secrets docker-config ...'
 
 kubectl create namespace jenkins
 
-kubectl create secret generic aws-config \
+kubectl create secret generic docker-config \
     --save-config --dry-run=client \
-    --from-literal=aws_key_id="$AWS_ACCESS_KEY_ID" \
-    --from-literal=aws_access_key="$AWS_SECRET_ACCESS_KEY" \
+    --from-literal=docker_username="$DOCKER_USERNAME" \
+    --from-literal=docker_password="$DOCKER_PASSWORD" \
+    --from-literal=GITHUB_REPO_TOKEN="$GITHUB_REPO_TOKEN" \
     -o yaml |
   kubectl apply -n jenkins -f -
 
 #uncomment to see the stored secret
 #kubectl get secret -n jenkins aws-config -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
 #kubectl get secret eth-adapter-config -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
-echo 'Created kubernetes secrets aws-config.'
+echo 'Created kubernetes secrets docker-config.'
 }
 
 
@@ -39,7 +35,7 @@ for i in "$@"
 do
   case $i in
     --docker)
-      configure_aws
+      configure_docker
       ;;
     --jenkins-secret)
       create_jenkins_secret
